@@ -1,6 +1,8 @@
 package me.nickac.fakedialer;
 
+import android.media.ToneGenerator;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -11,6 +13,7 @@ import me.nickac.fakedialer.fragment.InCallVoiceFragment;
 import me.nickac.fakedialer.model.Call;
 import me.nickac.fakedialer.model.CallScreenButton;
 import me.nickac.fakedialer.model.Contact;
+import me.nickac.fakedialer.utils.DTMFUtils;
 import me.nickac.fakedialer.views.CheckableLabeledButton;
 
 public class InScreenDialerActivity extends AppCompatActivity implements InCallVoiceFragment.OnFragmentInteractionListener, DialpadFragment.OnFragmentEventListener {
@@ -23,6 +26,12 @@ public class InScreenDialerActivity extends AppCompatActivity implements InCallV
         setContentView(R.layout.activity_main);
         hideSystemUI();
         createFragment();
+    }
+
+    @Override
+    protected void onDestroy() {
+        DTMFUtils.INSTANCE.closeGenerator();
+        super.onDestroy();
     }
 
     private void createFragment() {
@@ -73,7 +82,15 @@ public class InScreenDialerActivity extends AppCompatActivity implements InCallV
 
     @Override
     public void onEndCallButtonPress(ImageButton v) {
-        finish();
+        (new Handler()).postDelayed(() -> runOnUiThread(this::endCallAndFinish), 400);
+    }
+
+    private void endCallAndFinish() {
+        if (voiceFragment != null) {
+            voiceFragment.stopTimer();
+            DTMFUtils.INSTANCE.playTone(ToneGenerator.TONE_PROP_PROMPT);
+            (new Handler()).postDelayed(() -> runOnUiThread(this::finish), 210);
+        }
     }
 
     @Override

@@ -2,20 +2,68 @@ package me.nickac.fakedialer.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.util.ArrayMap;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+import java.util.Map;
+import java.util.logging.Logger;
+
 import me.nickac.fakedialer.R;
+import me.nickac.fakedialer.utils.DTMFUtils;
+import me.nickac.fakedialer.views.dialpad.DialpadKeyButton;
 import me.nickac.fakedialer.views.dialpad.DialpadView;
 import me.nickac.fakedialer.views.dialpad.DtmfKeyListener;
 
-public class DialpadFragment extends Fragment {
+public class DialpadFragment extends Fragment implements View.OnKeyListener, DialpadKeyButton.OnPressedListener {
+
+    /**
+     * Hash Map to map a view id to a character
+     */
+    private static final Map<Integer, Character> displayMap = new ArrayMap<>();
+
+    /** Set up the static maps */
+    static {
+        // Map the buttons to the display characters
+        displayMap.put(R.id.one, '1');
+        displayMap.put(R.id.two, '2');
+        displayMap.put(R.id.three, '3');
+        displayMap.put(R.id.four, '4');
+        displayMap.put(R.id.five, '5');
+        displayMap.put(R.id.six, '6');
+        displayMap.put(R.id.seven, '7');
+        displayMap.put(R.id.eight, '8');
+        displayMap.put(R.id.nine, '9');
+        displayMap.put(R.id.zero, '0');
+        displayMap.put(R.id.pound, '#');
+        displayMap.put(R.id.star, '*');
+    }
+
+    private final int[] buttonIds =
+            new int[]{
+                    R.id.zero,
+                    R.id.one,
+                    R.id.two,
+                    R.id.three,
+                    R.id.four,
+                    R.id.five,
+                    R.id.six,
+                    R.id.seven,
+                    R.id.eight,
+                    R.id.nine,
+                    R.id.star,
+                    R.id.pound
+            };
 
     private DialpadView dialpadView;
     private EditText dtmfDialerField;
@@ -28,7 +76,7 @@ public class DialpadFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.Dialer_ThemeBase);
         LayoutInflater layoutInflater = inflater.cloneInContext(contextThemeWrapper);
@@ -54,7 +102,12 @@ public class DialpadFragment extends Fragment {
     }
 
     private void configureKeypadListeners() {
-
+        DialpadKeyButton dialpadKey;
+        for (int buttonId : buttonIds) {
+            dialpadKey = dialpadView.findViewById(buttonId);
+            dialpadKey.setOnKeyListener(this);
+            dialpadKey.setOnPressedListener(this);
+        }
     }
 
     @Override
@@ -87,6 +140,59 @@ public class DialpadFragment extends Fragment {
             mHandler.closeDialpad(v);
         }
     }
+
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        Log.d("DialpadFragment", "onKey:  keyCode " + keyCode + ", view " + v);
+
+        if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER) {
+            int viewId = v.getId();
+            if (displayMap.containsKey(viewId)) {
+                switch (event.getAction()) {
+                    case KeyEvent.ACTION_DOWN:
+                        if (event.getRepeatCount() == 0) {
+                            processDtmf(displayMap.get(viewId));
+                        }
+                        break;
+                    case KeyEvent.ACTION_UP:
+                        stopDtmf();
+                        break;
+                    default: // fall out
+                }
+                // do not return true [handled] here, since we want the
+                // press / click animation to be handled by the framework.
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void onPressed(View view, boolean pressed) {
+        if (pressed && displayMap.containsKey(view.getId())) {
+            Log.d("DialpadFragment", "onPressed: " + pressed + " " + displayMap.get(view.getId()));
+            processDtmf(displayMap.get(view.getId()));
+        }
+        if (!pressed) {
+            Log.d("DialpadFragment", "onPressed: " + pressed);
+            stopDtmf();
+        }
+    }
+
+    private void stopDtmf() {
+        DTMFUtils.INSTANCE.stopTone();
+    }
+
+    private void processDtmf(Character c) {
+        appendDigitsToField(c);
+        DTMFUtils.INSTANCE.playTone(c);
+    }
+
+    public void appendDigitsToField(char digit) {
+        if (dtmfDialerField != null) {
+            dtmfDialerField.getText().append(digit);
+        }
+    }
+
 
     /**
      * LinearLayout with getter and setter methods for the translationY property using floats, for
