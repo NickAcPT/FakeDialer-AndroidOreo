@@ -69,6 +69,7 @@ public class DialpadFragment extends Fragment implements View.OnKeyListener, Dia
     private EditText dtmfDialerField;
     private DtmfKeyListener dtmfKeyListener;
     private OnFragmentEventListener mHandler;
+    private boolean digitsCanBeEdited;
 
     public DialpadFragment() {
         // Required empty public constructor
@@ -82,7 +83,7 @@ public class DialpadFragment extends Fragment implements View.OnKeyListener, Dia
         LayoutInflater layoutInflater = inflater.cloneInContext(contextThemeWrapper);
         final View parent = layoutInflater.inflate(R.layout.incall_dialpad_fragment, container, false);
         dialpadView = parent.findViewById(R.id.dialpad_view);
-        dialpadView.setCanDigitsBeEdited(false);
+        dialpadView.setCanDigitsBeEdited(digitsCanBeEdited);
         dialpadView.setBackgroundResource(R.color.incall_dialpad_background);
         dtmfDialerField = parent.findViewById(R.id.digits);
         if (dtmfDialerField != null) {
@@ -95,7 +96,7 @@ public class DialpadFragment extends Fragment implements View.OnKeyListener, Dia
             configureKeypadListeners();
         }
         View backButton = dialpadView.findViewById(R.id.dialpad_back);
-        backButton.setVisibility(View.VISIBLE);
+        backButton.setVisibility(digitsCanBeEdited ? View.GONE : View.VISIBLE);
         backButton.setOnClickListener(this::onDialpadBackButtonClick);
 
         return parent;
@@ -191,6 +192,10 @@ public class DialpadFragment extends Fragment implements View.OnKeyListener, Dia
         if (dtmfDialerField != null) {
             dtmfDialerField.getText().append(digit);
         }
+    }
+
+    public void setCanDigitsBeEdited(boolean b) {
+        digitsCanBeEdited = b;
     }
 
 

@@ -59,6 +59,16 @@
         <item name="android:stateListAnimator">@animator/disabled_alpha</item>
     </style>
 
+    <style name="Incall.Button.Ongoing" parent="Incall.Button.End">
+        <item name="android:background">@drawable/incall_start_call_background</item>
+        <item name="android:elevation">8dp</item>
+        <item name="android:layout_height">@dimen/incall_end_call_button_size</item>
+        <item name="android:layout_width">@dimen/incall_end_call_button_size</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:src">@drawable/ic_ongoing_phone_24px_01</item>
+        <item name="android:stateListAnimator">@animator/disabled_alpha</item>
+    </style>
+
     <color name="paginator_dot">#FFF</color>
     <color name="paginator_path">#66FFFFFF</color>
 
@@ -87,7 +97,29 @@
         <item name="android:windowShowWallpaper">true</item>
     </style>
 
-    <style name="InCallDialpad" parent="Dialpad.Themed">
+    <style name="Theme.OngoingCallScreen" parent="@style/Theme.InCallScreen">
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">#DDFFFFFF</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:colorPrimaryDark">@color/dialer_theme_color_dark</item>
+        <item name="colorPrimaryDark">@color/dialer_theme_color_dark</item>
+
+        <item name="dialpad_key_button_touch_tint">?attr/colorPrimary20pct</item>
+        <item name="dialpad_style">@style/InCallDialpad</item>
+        <item name="android:windowAnimationStyle">@null</item>
+
+        <item name="android:windowBackground">@drawable/incall_background_gradient</item>
+        <item name="android:windowShowWallpaper">true</item>
+    </style>
+
+    <style name="MainActivityTheme" parent="Dialer.ThemeBase.NoActionBar">
+        <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+        <item name="dialpad_style">@style/Dialpad.Themed</item>
+    </style>
+
+    <style name="InCallDialpad" parent="Dialer.ThemeBase.NoActionBar">
         <item name="dialpad_key_number_margin_bottom">
             @dimen/incall_dialpad_key_number_margin_bottom
         </item>
@@ -110,13 +142,18 @@
             @dimen/incall_end_call_spacing
         </item>
         <item name="dialpad_elevation">10dp</item>
+
+        <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+        <item name="dialpad_style">@style/Dialpad.Themed</item>
     </style>
+
     <style name="Dialpad.Themed">
         <item name="dialpad_text_color">?android:attr/textColorSecondary</item>
         <item name="dialpad_text_color_primary">?android:attr/colorPrimary</item>
         <item name="dialpad_text_color_secondary">?android:attr/textColorSecondary</item>
         <item name="dialpad_background">?android:attr/colorBackgroundFloating</item>
     </style>
+
     <style name="Dialpad">
         <item name="dialpad_digits_adjustable_height">@dimen/dialpad_digits_height</item>
         <item name="dialpad_digits_adjustable_text_size">@dimen/dialpad_digits_text_size</item>
@@ -205,4 +242,13 @@
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:textSize">16sp</item>
     </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

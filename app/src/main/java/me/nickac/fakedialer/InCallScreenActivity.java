@@ -16,14 +16,14 @@ import me.nickac.fakedialer.model.Contact;
 import me.nickac.fakedialer.utils.DTMFUtils;
 import me.nickac.fakedialer.views.CheckableLabeledButton;
 
-public class InScreenDialerActivity extends AppCompatActivity implements InCallVoiceFragment.OnFragmentInteractionListener, DialpadFragment.OnFragmentEventListener {
+public class InCallScreenActivity extends AppCompatActivity implements InCallVoiceFragment.OnFragmentInteractionListener, DialpadFragment.OnFragmentEventListener {
 
     private InCallVoiceFragment voiceFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_incallscreen);
         hideSystemUI();
         createFragment();
     }

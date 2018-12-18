@@ -2,18 +2,130 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".InScreenDialerActivity" >
+    tools:context=".MainActivity">
 
-    <LinearLayout
-        android:id="@+id/incall_fragment_container"
-        android:name="me.nickac.fakedialer.InCallVoiceFragment"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:orientation="horizontal" />
+    <RelativeLayout
+        android:id="@+id/incall_ui_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:fitsSystemWindows="true">
+
+        <LinearLayout
+            android:id="@id/incall_contact_grid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="invisible">
+
+            <Space
+                android:id="@id/contactgrid_avatar"
+                android:layout_width="@dimen/incall_avatar_size"
+                android:layout_height="@dimen/incall_avatar_size"
+                android:layout_marginBottom="8dp"
+                android:elevation="2dp" />
+
+            <include
+                layout="@layout/incall_contactgrid_top_row_space"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/incall_window_margin_horizontal"
+                android:layout_marginEnd="@dimen/incall_window_margin_horizontal" />
+
+            <!-- We have to keep deprecated singleLine to allow long text being truncated with ellipses.
+                       a bug -->
+            <me.nickac.fakedialer.views.AutoResizeTextView
+                android:id="@id/contactgrid_contact_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/incall_window_margin_horizontal"
+                android:layout_marginEnd="@dimen/incall_window_margin_horizontal"
+                android:layout_marginBottom="4dp"
+                android:singleLine="true"
+                android:textAppearance="@style/Dialer.Incall.TextAppearance.Large"
+                android:visibility="invisible"
+                app:autoResizeText_minTextSize="28sp"
+                tools:ignore="Deprecated"
+                tools:text="Jake Peralta" />
+
+            <me.nickac.fakedialer.views.AutoResizeTextView
+                android:id="@+id/contactgrid_contact_name2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/incall_window_margin_horizontal"
+                android:layout_marginEnd="@dimen/incall_window_margin_horizontal"
+                android:layout_marginBottom="4dp"
+                android:singleLine="true"
+                android:textAppearance="@style/Dialer.Incall.TextAppearance.Large"
+                android:visibility="invisible"
+                app:autoResizeText_minTextSize="28sp"
+                tools:ignore="Deprecated"
+                tools:text="Jake Peralta" />
+
+            <me.nickac.fakedialer.views.AutoResizeTextView
+                android:id="@+id/contactgrid_contact_name3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/incall_window_margin_horizontal"
+                android:layout_marginEnd="@dimen/incall_window_margin_horizontal"
+                android:layout_marginBottom="4dp"
+                android:singleLine="true"
+                android:textAppearance="@style/Dialer.Incall.TextAppearance.Large"
+                android:visibility="invisible"
+                app:autoResizeText_minTextSize="28sp"
+                tools:ignore="Deprecated"
+                tools:text="Jake Peralta" />
+
+            <me.nickac.fakedialer.views.AutoResizeTextView
+                android:id="@+id/contactgrid_contact_name4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/incall_window_margin_horizontal"
+                android:layout_marginEnd="@dimen/incall_window_margin_horizontal"
+                android:layout_marginBottom="4dp"
+                android:singleLine="true"
+                android:textAppearance="@style/Dialer.Incall.TextAppearance.Large"
+                android:visibility="invisible"
+                app:autoResizeText_minTextSize="28sp"
+                tools:ignore="Deprecated"
+                tools:text="Jake Peralta" />
+
+        </LinearLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/incall_paginator"
+            android:layout_below="@+id/incall_contact_grid"
+            android:layout_centerHorizontal="true">
+
+            <me.nickac.fakedialer.views.LockableViewPager
+                android:id="@+id/main_screen_dialpad_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+            </me.nickac.fakedialer.views.LockableViewPager>
+        </android.support.constraint.ConstraintLayout>
+
+        <ImageButton
+            android:id="@+id/incall_end_call"
+            style="@style/Incall.Button.Ongoing"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="36dp"
+            android:contentDescription="@string/incall_content_description_end_call" />
+    </RelativeLayout>
+
 </android.support.constraint.ConstraintLayout>

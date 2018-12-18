@@ -165,8 +165,9 @@ public class InCallVoiceFragment extends Fragment {
             contactName.setText(call.getContact().getName());
             setShown(hdIcon, call.isHdCall());
             setShown(spamIcon, call.isSpamCall());
-            setShown(forwardIcon, call.isForwardedCall());
             setShown(workIcon, call.isWorkProfileCall());
+
+            hdIcon.setBackground(getResources().getDrawable(R.drawable.asd_hd_icon, getContext().getTheme()));
 
             letterTile.setCanonicalDialerLetterTileDetails(
                     call.getContact().getName(),
