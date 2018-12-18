@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <color name="blocked_contact_background">#A52714</color>
+
+
+    <color name="conference_call_manager_caller_name_text_color">#4d4d4d</color>
+    <!-- Used with some smaller texts in manage conference screen. -->
+    <color name="conference_call_manager_secondary_text_color">#999999</color>
+
+    <color name="incall_dialpad_background">#ffffff</color>
+
+    <!-- Background color for status bar. For portrait this will be ignored. -->
+    <color name="statusbar_background_color">?android:attr/colorPrimary</color>
+
+    <!-- Background colors for InCallUI. This is a set of colors which pass WCAG
+         AA and all have a contrast ratio over 5:1.
+
+        These colors are also used by InCallUIMaterialColorMapUtils to generate
+        primary activity colors.
+    -->
+    <array name="background_colors">
+        <item>#00796B</item>
+        <item>#3367D6</item>
+        <item>#303F9F</item>
+        <item>#7B1FA2</item>
+        <item>#C2185B</item>
+        <item>#C53929</item>
+        <item>#A52714</item>
+    </array>
+
+    <!-- Darker versions of background_colors, two shades darker. These colors are used for the
+         status bar. -->
+    <array name="background_colors_dark">
+        <item>#00695C</item>
+        <item>#2A56C6</item>
+        <item>#283593</item>
+        <item>#6A1B9A</item>
+        <item>#AD1457</item>
+        <item>#B93221</item>
+        <item>#841F10</item>
+    </array>
+
+    <color name="incall_background_gradient_top">#E91141BB</color>
+    <color name="incall_background_gradient_middle">#E91141BB</color>
+    <color name="incall_background_gradient_bottom">#CC229FEB</color>
+
+    <color name="incall_background_multiwindow">#E91141BB</color>
+
+    <color name="incall_background_gradient_spam_top">#E5A30B0B</color>
+    <color name="incall_background_gradient_spam_middle">#D6C01111</color>
+    <color name="incall_background_gradient_spam_bottom">#B8E55135</color>
+
+    <color name="incall_background_multiwindow_spam">#E9C22E2E</color>
+
+
+    <array name="letter_tile_colors">
+        <item>#DB4437</item>
+        <item>#E91E63</item>
+        <item>#9C27B0</item>
+        <item>#673AB7</item>
+        <item>#3F51B5</item>
+        <item>#4285F4</item>
+        <item>#039BE5</item>
+        <item>#0097A7</item>
+        <item>#009688</item>
+        <item>#0F9D58</item>
+        <item>#689F38</item>
+        <item>#EF6C00</item>
+        <item>#FF5722</item>
+        <item>#757575</item>
+    </array>
+
+    <color name="spam_contact_background">#A52714</color>
+
+    <color name="letter_tile_default_color">#cccccc</color>
+
+    <color name="letter_tile_font_color">#ffffff</color>
+</resources>

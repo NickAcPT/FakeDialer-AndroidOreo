@@ -1,0 +1,63 @@
+<resources>
+    <string name="app_name">FakeDialer</string>
+
+
+    <string name="incall_content_description_end_call">End call</string>
+
+    <string name="incall_content_description_muted">Muted</string>
+
+    <string name="incall_content_description_unmuted">Unmuted</string>
+
+    <string name="incall_content_description_swap_calls">Swap calls</string>
+
+    <string name="incall_content_description_swap_sim">Change SIM</string>
+
+    <string name="incall_content_description_merge_calls">Merge calls</string>
+
+    <string name="incall_content_description_earpiece">Handset earpiece</string>
+
+    <string name="incall_content_description_speaker">Speaker</string>
+
+    <string name="incall_content_description_bluetooth">Bluetooth</string>
+
+    <string name="incall_content_description_headset">Wired headset</string>
+
+    <!-- Text for the onscreen "Hold" button when it is not selected. Pressing it will put
+       the call on hold. -->
+    <string name="incall_content_description_hold">Hold call</string>
+    <!-- Text for the onscreen "Hold" button when it is selected. Pressing it will resume
+         the call from a previously held state. -->
+    <string name="incall_content_description_unhold">Resume call</string>
+
+    <string name="incall_content_description_video_on">Video on</string>
+
+    <string name="incall_content_description_video_off">Video off</string>
+
+    <string name="incall_content_description_swap_video">Swap video</string>
+
+    <!-- Button shown during a phone to route audio from earpiece to speaker phone.
+       [CHAR LIMIT=12] -->
+    <string name="incall_label_speaker">Speaker</string>
+    <!-- Button shown during a phone to switch the audio route.
+       [CHAR LIMIT=12] -->
+    <string name="incall_label_audio">Sound</string>
+
+    <string name="incall_label_videocall">Video call</string>
+    <string name="incall_label_rttcall">RTT</string>
+    <string name="incall_label_hold">Hold</string>
+    <string name="incall_label_add_call">Add call</string>
+    <string name="incall_label_mute">Mute</string>
+    <string name="incall_label_end_call">End call</string>
+    <string name="incall_label_dialpad">Keypad</string>
+    <string name="incall_talkback_speaker_on">, is on</string>
+    <string name="incall_talkback_speaker_off">, is off</string>
+    <string name="incall_label_merge">Merge</string>
+    <string name="incall_label_manage">Manage</string>
+    <string name="a11y_description_incall_label_manage_content">Manage callers</string>
+    <string name="incall_label_swap">Swap</string>
+    <string name="incall_label_swap_sim">Change SIM</string>
+    <string name="incall_note_sent">Note sent</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
