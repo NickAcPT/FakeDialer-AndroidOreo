@@ -132,8 +132,6 @@
     <dimen name="dialpad_key_number_default_margin_bottom">3dp</dimen>
     <dimen name="dialpad_digits_text_size">34sp</dimen>
     <dimen name="dialpad_digits_height">60dp</dimen>
-    <!-- The bottom space of the dialpad to account for the dial button -->
-    <dimen name="dialpad_bottom_space_height">80dp</dimen>
 
     <!-- The InCallUI dialpad will sometimes want digits sizes that are different
          from dialer. Note, these are the default sizes for small devices. Larger
@@ -162,4 +160,37 @@
     <dimen name="video_call_lte_to_wifi_failed_do_not_show_text_size">16sp</dimen>
 
     <item name="letter_to_tile_ratio" type="dimen">67%</item>
+
+
+    <!-- Text dimensions for dialpad keys -->
+    <dimen name="dialpad_key_pound_size">23sp</dimen>
+    <dimen name="dialpad_key_star_size">36sp</dimen>
+    <dimen name="dialpad_key_height">64dp</dimen>
+    <dimen name="dialpad_symbol_margin_bottom">13dp</dimen>
+    <dimen name="dialpad_digits_text_min_size">24sp</dimen>
+    <dimen name="dialpad_digits_padding">16dp</dimen>
+    <dimen name="dialpad_digits_menu_left_padding">8dp</dimen>
+    <dimen name="dialpad_digits_menu_right_padding">10dp</dimen>
+    <dimen name="dialpad_voicemail_icon_size">18dp</dimen>
+    <dimen name="dialpad_key_button_translate_y">100dp</dimen>
+    <dimen name="dialpad_overflow_margin">8dp</dimen>
+    <dimen name="dialpad_space_above_keys">14dp</dimen>
+    <dimen name="dialpad_space_below_keys">8dp</dimen>
+
+    <!-- Top/Bottom padding around the ILD rate display box. -->
+    <dimen name="ild_margin_height">10dp</dimen>
+
+    <!-- Length of dialpad's shadows in dialer. -->
+    <dimen name="shadow_length">10dp</dimen>
+
+    <dimen name="barcode_height">100dp</dimen>
+
+    <dimen name="floating_action_button_margin_right">16dp</dimen>
+    <dimen name="floating_action_button_width">56dp</dimen>
+
+    <dimen name="dialpad_key_margin_right">5dp</dimen>
+    <dimen name="dialpad_key_number_width">20sp</dimen>
+
+    <!-- The bottom space of the dialpad to account for the dial button -->
+    <dimen name="dialpad_bottom_space_height">80dp</dimen>
 </resources>

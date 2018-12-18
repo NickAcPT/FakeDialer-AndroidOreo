@@ -16,7 +16,7 @@ public enum CallScreenButton {
             0,
             0,
             R.string.incall_label_dialpad,
-            false,
+            true,
             R.drawable.quantum_ic_dialpad_vd_theme_24),
     SPEAKER(
             R.string.incall_content_description_speaker,

@@ -89,4 +89,12 @@
         <attr format="string|reference" name="incall_labelText"/>
         <attr name="android:enabled"/>
     </declare-styleable>
+
+    <declare-styleable name="ResizingText">
+        <attr format="dimension" name="resizing_text_min_size"/>
+    </declare-styleable>
+
+    <declare-styleable name="MaxHeightScrollView">
+        <attr name="maxHeight" format="dimension"/>
+    </declare-styleable>
 </resources>

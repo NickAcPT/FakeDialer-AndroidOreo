@@ -29,6 +29,15 @@ public class InCallButtonGridFragment extends Fragment {
         return buttons[number];
     }
 
+    public CheckableLabeledButton getButton(CallScreenButton button) {
+        for (CheckableLabeledButton btn : buttons) {
+            if (btn.getInternalButton().ordinal() == button.ordinal()) {
+                return btn;
+            }
+        }
+        return null;
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -53,6 +62,7 @@ public class InCallButtonGridFragment extends Fragment {
             CallScreenButton callButton = values[i];
 
             CheckableLabeledButton btn = getButton(i);
+            btn.setInternalButton(callButton);
             updateButton(btn, callButton);
             if (mEventHandler != null) {
                 btn.setOnCheckedChangeListener((v, isChecked) -> handleButtonClick(v, callButton));

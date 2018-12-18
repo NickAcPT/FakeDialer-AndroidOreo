@@ -38,6 +38,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import me.nickac.fakedialer.R;
+import me.nickac.fakedialer.model.CallScreenButton;
 
 /**
  * A button to show on the incall screen
@@ -46,6 +47,7 @@ public class CheckableLabeledButton extends LinearLayout implements Checkable {
 
     private static final int[] CHECKED_STATE_SET = {android.R.attr.state_checked};
     private static final float DISABLED_STATE_OPACITY = .3f;
+    private CallScreenButton internalButton;
     private boolean broadcasting;
     private boolean isChecked;
     private OnCheckedChangeListener onCheckedChangeListener;
@@ -63,6 +65,14 @@ public class CheckableLabeledButton extends LinearLayout implements Checkable {
 
     public CheckableLabeledButton(Context context) {
         this(context, null);
+    }
+
+    public CallScreenButton getInternalButton() {
+        return internalButton;
+    }
+
+    public void setInternalButton(CallScreenButton internalButton) {
+        this.internalButton = internalButton;
     }
 
     private void init(Context context, AttributeSet attrs) {

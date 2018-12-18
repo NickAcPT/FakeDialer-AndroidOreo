@@ -1,29 +1,40 @@
 package me.nickac.fakedialer.fragment;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.telecom.TelecomManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Locale;
+
 import me.nickac.fakedialer.R;
 import me.nickac.fakedialer.model.Call;
 import me.nickac.fakedialer.model.CallScreenButton;
 import me.nickac.fakedialer.utils.SharedObjects;
+import me.nickac.fakedialer.utils.animation.AnimUtils;
+import me.nickac.fakedialer.utils.animation.AnimationListenerAdapter;
 import me.nickac.fakedialer.views.CheckableLabeledButton;
 import me.nickac.fakedialer.views.LetterTileDrawable;
 import me.nickac.fakedialer.views.LockableViewPager;
 
 public class InCallVoiceFragment extends Fragment {
     private static final String ARG_CONTACT = "call";
+    LockableViewPager pager;
     private Call call;
     private OnFragmentInteractionListener mListener;
     private TextView contactName, bottomText;
@@ -34,10 +45,13 @@ public class InCallVoiceFragment extends Fragment {
     private ImageView forwardedNumber;
     private ImageView spamIcon;
     private ImageButton endCallButton;
-
-    LockableViewPager pager;
     private ImageView avatarImage;
+    private boolean dialpadVisible;
     private LetterTileDrawable letterTile;
+    private DialpadFragment dialPadFragment;
+    private Animation dialpadSlideInAnimation;
+    private Animation dialpadSlideOutAnimation;
+    private InCallButtonGridFragment buttonGridFragment;
 
     public InCallVoiceFragment() {
         // Required empty public constructor
@@ -52,6 +66,10 @@ public class InCallVoiceFragment extends Fragment {
         return fragment;
     }
 
+    public static boolean isRtl() {
+        return TextUtils.getLayoutDirectionFromLocale(Locale.getDefault()) == View.LAYOUT_DIRECTION_RTL;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,14 +82,60 @@ public class InCallVoiceFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_incall_voice, container, false);
+
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        addDialpadFragment(transaction);
+        transaction.commitNow();
+
         attachFieldsToFragment(view);
         return view;
     }
 
+    public boolean isDialpadVisible() {
+        return dialpadVisible;
+    }
+
+    public void initAnimations(Context ctx) {
+        boolean isLandscape =
+                getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        boolean isRtl = isRtl();
+        if (isLandscape) {
+            dialpadSlideInAnimation =
+                    AnimationUtils.loadAnimation(
+                            ctx, isRtl ? R.anim.dialpad_slide_in_left : R.anim.dialpad_slide_in_right);
+            dialpadSlideOutAnimation =
+                    AnimationUtils.loadAnimation(
+                            ctx, isRtl ? R.anim.dialpad_slide_out_left : R.anim.dialpad_slide_out_right);
+        } else {
+            dialpadSlideInAnimation = AnimationUtils.loadAnimation(ctx, R.anim.dialpad_slide_in_bottom);
+            dialpadSlideOutAnimation =
+                    AnimationUtils.loadAnimation(ctx, R.anim.dialpad_slide_out_bottom);
+        }
+        dialpadSlideInAnimation.setInterpolator(AnimUtils.EASE_IN);
+        dialpadSlideOutAnimation.setInterpolator(AnimUtils.EASE_OUT);
+
+        dialpadSlideInAnimation.setAnimationListener(new AnimationListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                dialpadVisible = true;
+            }
+        });
+        dialpadSlideOutAnimation.setAnimationListener(new AnimationListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                dialpadVisible = false;
+            }
+        });
+    }
+
     public void attachButtonsToFragment() {
-        if (getFragmentManager() == null /*&& SharedObjects.INSTANCE.getFragmentTransaction() == null*/) return;
-        getFragmentManager().beginTransaction()
-                .add(R.id.incall_pager, new InCallButtonGridFragment().withCallVoiceFragment(this)).commit();
+        if (getFragmentManager() == null /*&& SharedObjects.INSTANCE.getFragmentTransaction() == null*/)
+            return;
+        buttonGridFragment = new InCallButtonGridFragment().withCallVoiceFragment(this);
+        getChildFragmentManager().beginTransaction()
+                .add(R.id.incall_pager, buttonGridFragment)
+                .commitAllowingStateLoss();
+        getFragmentManager().executePendingTransactions();
     }
 
     private void attachFieldsToFragment(View view) {
@@ -128,6 +192,7 @@ public class InCallVoiceFragment extends Fragment {
         if (context instanceof OnFragmentInteractionListener) {
             letterTile = new LetterTileDrawable(context.getResources());
             mListener = (OnFragmentInteractionListener) context;
+            initAnimations(context);
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -154,15 +219,75 @@ public class InCallVoiceFragment extends Fragment {
     }
 
     public void onButtonPress(CheckableLabeledButton v, CallScreenButton button) {
-        if (mListener != null) {
-            mListener.onButtonPress(v, button);
-        }
+        if (mListener != null) mListener.onButtonPress(v, button);
     }
 
     public void onEndCallButtonPress(ImageButton v) {
         if (mListener != null) {
             mListener.onEndCallButtonPress(v);
         }
+    }
+
+    private int getDialpadContainerId() {
+        return R.id.incall_dialpad_container;
+    }
+
+    private void addDialpadFragment(FragmentTransaction transaction) {
+        if (dialPadFragment != null) {
+            return;
+        }
+        dialPadFragment = new DialpadFragment();
+        transaction.add(getDialpadContainerId(), dialPadFragment);
+        transaction.hide(dialPadFragment);
+    }
+
+    private void animateDialpad(boolean show) {
+        if (show)
+            dialPadFragment.animateShowDialpad();
+        View view = dialPadFragment
+                .getView();
+        if (view != null) {
+            Animation animation = show ? dialpadSlideInAnimation : dialpadSlideOutAnimation;
+            if (animation != null) {
+                view.startAnimation(animation);
+            }
+        }
+    }
+
+    public void showDialpad() {
+        if (dialPadFragment == null)
+            return;
+        FragmentManager manager = getChildFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+
+        transaction.show(dialPadFragment);
+        transaction.commitAllowingStateLoss();
+        manager.executePendingTransactions();
+        dialPadFragment.setUserVisibleHint(false);
+
+        animateDialpad(true);
+    }
+
+    public void hideDialpad() {
+        if (dialPadFragment == null)
+            return;
+        FragmentManager manager = getChildFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+
+        transaction.hide(dialPadFragment);
+        transaction.commitAllowingStateLoss();
+        manager.executePendingTransactions();
+        dialPadFragment.setUserVisibleHint(false);
+
+        //Uncheck the dialpad button
+        if (buttonGridFragment != null) {
+            CheckableLabeledButton button = buttonGridFragment.getButton(CallScreenButton.DIALPAD);
+            if (button != null) {
+                button.setChecked(false);
+            }
+        }
+
+        animateDialpad(false);
     }
 
     /**

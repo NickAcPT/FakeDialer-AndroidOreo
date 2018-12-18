@@ -1,20 +1,21 @@
 package me.nickac.fakedialer;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 
+import me.nickac.fakedialer.fragment.DialpadFragment;
 import me.nickac.fakedialer.fragment.InCallVoiceFragment;
 import me.nickac.fakedialer.model.Call;
 import me.nickac.fakedialer.model.CallScreenButton;
 import me.nickac.fakedialer.model.Contact;
-import me.nickac.fakedialer.utils.SharedObjects;
 import me.nickac.fakedialer.views.CheckableLabeledButton;
 
-public class InScreenDialerActivity extends AppCompatActivity implements InCallVoiceFragment.OnFragmentInteractionListener {
+public class InScreenDialerActivity extends AppCompatActivity implements InCallVoiceFragment.OnFragmentInteractionListener, DialpadFragment.OnFragmentEventListener {
+
+    private InCallVoiceFragment voiceFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,16 +28,16 @@ public class InScreenDialerActivity extends AppCompatActivity implements InCallV
     private void createFragment() {
         Call call = new Call(new Contact("122", "Mike"));
         prepareForCall(call);
-        InCallVoiceFragment fragment = InCallVoiceFragment.createInstance(call);
+        voiceFragment = InCallVoiceFragment.createInstance(call);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        //SharedObjects.INSTANCE.setFragmentTransaction(transaction);
         transaction
                 .add(
                         R.id.incall_fragment_container,
-                        fragment
+                        voiceFragment
                 )
                 .commitNow();
-        fragment.attachButtonsToFragment();
+        voiceFragment.attachButtonsToFragment();
+        voiceFragment.initAnimations(this);
 
     }
 
@@ -63,10 +64,29 @@ public class InScreenDialerActivity extends AppCompatActivity implements InCallV
     public void onButtonPress(CheckableLabeledButton v, CallScreenButton button) {
         if (button.isCheckable())
             v.setChecked(!v.isChecked());
+        if (button == CallScreenButton.DIALPAD) {
+            if (v.isChecked()) {
+                voiceFragment.showDialpad();
+            }
+        }
     }
 
     @Override
     public void onEndCallButtonPress(ImageButton v) {
+        finish();
+    }
 
+    @Override
+    public void onBackPressed() {
+        if (voiceFragment != null && voiceFragment.isDialpadVisible()) {
+            voiceFragment.hideDialpad();
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    @Override
+    public void closeDialpad(View v) {
+        voiceFragment.hideDialpad();
     }
 }
