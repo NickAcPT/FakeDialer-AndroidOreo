@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import java.util.Map;
@@ -70,6 +71,7 @@ public class DialpadFragment extends Fragment implements View.OnKeyListener, Dia
     private DtmfKeyListener dtmfKeyListener;
     private OnFragmentEventListener mHandler;
     private boolean digitsCanBeEdited;
+    private ImageButton delete;
 
     public DialpadFragment() {
         // Required empty public constructor
@@ -95,6 +97,22 @@ public class DialpadFragment extends Fragment implements View.OnKeyListener, Dia
             dtmfDialerField.setElegantTextHeight(false);
             configureKeypadListeners();
         }
+
+        delete = dialpadView.getDeleteButton();
+
+        if (delete != null) {
+            delete.setOnClickListener(v -> {
+                int length = dialpadView.getDigits().getText().length();
+                if (length > 0) {
+                    dialpadView.getDigits().getText().delete(length - 1, length);
+                }
+            });
+            delete.setOnLongClickListener(v -> {
+                dialpadView.getDigits().setText("");
+                return true;
+            });
+        }
+
         View backButton = dialpadView.findViewById(R.id.dialpad_back);
         backButton.setVisibility(digitsCanBeEdited ? View.GONE : View.VISIBLE);
         backButton.setOnClickListener(this::onDialpadBackButtonClick);
